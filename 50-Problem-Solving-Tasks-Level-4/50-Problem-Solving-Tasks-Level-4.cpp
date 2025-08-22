@@ -54,16 +54,16 @@ int main()
 
     short Month = ReadMonth();
 
-    cout << "\nNumber of Days in Month [" << Year << "] is "
+    cout << "\nNumber of Days in Month [" << Month << "] is "
         << NumberOfDaysInAMonth(Year, Month);
 
-    cout << "\nNumber of Hours in Month [" << Year << "] is "
+    cout << "\nNumber of Hours in Month [" << Month << "] is "
         << NumberOfHoursInAMonth(Year, Month);
 
-    cout << "\nNumber of Minutes in Month [" << Year << "] is "
+    cout << "\nNumber of Minutes in Month [" << Month << "] is "
         << NumberOfMinutesInAMonth(Year, Month);
 
-    cout << "\nNumber of Seconds in Month [" << Year << "] is "
+    cout << "\nNumber of Seconds in Month [" << Month << "] is "
         << NumberOfSecondsInAMonth(Year, Month);
     
     system("pause>0");
