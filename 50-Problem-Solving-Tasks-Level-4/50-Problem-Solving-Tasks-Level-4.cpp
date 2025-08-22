@@ -30,28 +30,14 @@ bool CheckIfLeapYear(short Year) {
 int NumberOfDaysInAMonth(short Year, short Month) {
     if (Month < 1 || Month > 12)
         return 0;
-    if (Month == 2)
-        return CheckIfLeapYear(Year) ? 29 : 28;
-    short arr31Days[12] = { 1, 3, 5, 7, 8, 10, 12 };
-    for (short i = 1; i <= 12; i++)
-    {
-        if (arr31Days[i - 1] == Month)
-            return 31;
-    }
-    return 30;
+    
+    int Days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    return (Month == 2) ? (CheckIfLeapYear(Year) ? 29 : 28) :
+        Days[Month - 1];
 }
 
-int NumberOfHoursInAMonth(short Year, short Month) {
-    return NumberOfDaysInAMonth(Year, Month) * 24;
-}
 
-int NumberOfMinutesInAMonth(short Year, short Month) {
-    return NumberOfHoursInAMonth(Year, Month) * 60;
-}
-
-int NumberOfSecondsInAMonth(short Year, short Month) {
-    return NumberOfMinutesInAMonth(Year, Month) * 60;
-}
 
 
 
@@ -66,14 +52,7 @@ int main()
     cout << "\nNumber of Days in Month [" << Month << "] is "
         << NumberOfDaysInAMonth(Year, Month);
 
-    cout << "\nNumber of Hours in Month [" << Month << "] is "
-        << NumberOfHoursInAMonth(Year, Month);
-
-    cout << "\nNumber of Minutes in Month [" << Month << "] is "
-        << NumberOfMinutesInAMonth(Year, Month);
-
-    cout << "\nNumber of Seconds in Month [" << Month << "] is "
-        << NumberOfSecondsInAMonth(Year, Month);
+   
     
     system("pause>0");
 }
