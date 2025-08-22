@@ -28,8 +28,17 @@ bool CheckIfLeapYear(short Year) {
 }
 
 int NumberOfDaysInAMonth(short Year, short Month) {
-    return (Month == 2) ? (CheckIfLeapYear(Year) ? 29 : 28) :
-    (Month == 4 || Month == 6 || Month == 9 || Month == 1) ? 30 : 31;
+    if (Month < 1 || Month > 12)
+        return 0;
+    if (Month == 2)
+        return CheckIfLeapYear(Year) ? 29 : 28;
+    short arr31Days[12] = { 1, 3, 5, 7, 8, 10, 12 };
+    for (short i = 1; i <= 12; i++)
+    {
+        if (arr31Days[i - 1] == Month)
+            return 31;
+    }
+    return 30;
 }
 
 int NumberOfHoursInAMonth(short Year, short Month) {
