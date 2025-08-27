@@ -36,11 +36,32 @@ sDate ReadFullDate() {
     return Date;
 }
 
-
-bool CheckIfDate1IsEqualToDate2(sDate Date1, sDate Date2){
-    bool Result = ((Date1.Year == Date2.Year) ? ((Date1.Month == Date2.Month) ? ((Date1.Day == Date2.Day) ? true: false): false):false);
-    return Result;
+bool IsLeapYear(short Year)
+{
+    return (Year % 4 == 0 && Year % 100 != 0) ||
+        (Year % 400 == 0);
 }
+
+short NumberOfDaysInAMonth(short Month, short Year)
+{
+    if (Month < 1 || Month > 12)
+        return 0;
+    int NumberOfDays[12] = {
+    31,28,31,30,31,30,31,31,30,31,30,31 };
+    return (Month == 2) ? (IsLeapYear(Year) ? 29
+        : 28) : NumberOfDays[Month - 1];
+}
+
+bool CheckIfLastMonthInYear(sDate Date){
+    return Date.Month == 12;
+}
+
+bool CheckIfLastDayInMonth(sDate Date) {
+    return Date.Day == NumberOfDaysInAMonth(Date.Month, Date.Year);
+}
+
+
+
 
 
 int main()
@@ -50,15 +71,18 @@ int main()
     
     sDate Date1 = ReadFullDate();
     cout << endl;
-    sDate Date2 = ReadFullDate();
     
-
-    if (CheckIfDate1IsEqualToDate2(Date1, Date2))
-        cout << "\nYes, Date1 is equal to Date2.";
+    
+    if (CheckIfLastDayInMonth(Date1))
+        cout << "\nYes, Day is Last In Month\n";
     else
-        cout << "\nNo, Date1 is not equal to Date2";
+        cout << "\No, Day is not Last In Month\n";
     
     
+    if (CheckIfLastMonthInYear(Date1))
+        cout << "\nYes, Month is Last In Year\n";
+    else
+        cout << "\nNo, Month is NOT Last In Year\n";
     
     system("pause>0");
 }
