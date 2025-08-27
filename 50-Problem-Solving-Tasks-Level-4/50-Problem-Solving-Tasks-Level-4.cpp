@@ -37,10 +37,8 @@ sDate ReadFullDate() {
 }
 
 
-bool CheckIfDate1IsLessThanDate2(sDate Date1, sDate Date2){
-    bool Result = (Date1.Year < Date2.Year) ? true : (Date1.Year > Date2.Year) ? false :
-        (Date1.Month < Date2.Month) ? true : (Date1.Month > Date2.Month) ? false :
-        (Date1.Day < Date2.Day) ? true : false;
+bool CheckIfDate1IsEqualToDate2(sDate Date1, sDate Date2){
+    bool Result = ((Date1.Year == Date2.Year) ? ((Date1.Month == Date2.Month) ? ((Date1.Day == Date2.Day) ? true: false): false):false);
     return Result;
 }
 
@@ -55,10 +53,10 @@ int main()
     sDate Date2 = ReadFullDate();
     
 
-    if (CheckIfDate1IsLessThanDate2(Date1, Date2))
-        cout << "\nYes, Date1 is less than Date2.";
+    if (CheckIfDate1IsEqualToDate2(Date1, Date2))
+        cout << "\nYes, Date1 is equal to Date2.";
     else
-        cout << "\nNo, Date1 is not less than Date2";
+        cout << "\nNo, Date1 is not equal to Date2";
     
     
     
