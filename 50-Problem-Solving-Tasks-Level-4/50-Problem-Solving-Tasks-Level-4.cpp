@@ -22,27 +22,6 @@ short ReadDay() {
     return Day;
 }
 
-bool IsLeapYear(short Year){
-    return (Year % 400 == 0) || (Year % 4 == 0 && Year % 100 != 0);
-}
-
-short NumberOfDaysInAMonth(short Month, short Year)
-{
-    if (Month < 1 || Month > 12)
-        return 0;
-    int NumberOfDays[12] = {
-    31,28,31,30,31,30,31,31,30,31,30,31 };
-    return (Month == 2) ? (IsLeapYear(Year) ? 29 : 28) : NumberOfDays[Month - 1];
-}
-
-short CalculateNumberOfDaysFromBeginningOfTheYear(short Year, short Month, short Day){
-    short TotalDays = 0;
-    for (int i = 1; i <= Month - 1; i++)
-        TotalDays += NumberOfDaysInAMonth(i, Year);
-    TotalDays += Day;
-    return TotalDays;
-}
-
 struct sDate {
     short Year;
     short Month;
@@ -57,44 +36,13 @@ sDate ReadFullDate() {
     return Date;
 }
 
-short DaysToAdd() {
-    short DaysToAdd = 0;
-    cout << "How many days to add ? ";
-    cin >> DaysToAdd;
-    return DaysToAdd;
+
+bool CheckIfDate1IsLessThanDate2(sDate Date1, sDate Date2){
+    bool Result = (Date1.Year < Date2.Year) ? true : (Date1.Year > Date2.Year) ? false :
+        (Date1.Month < Date2.Month) ? true : (Date1.Month > Date2.Month) ? false :
+        (Date1.Day < Date2.Day) ? true : false;
+    return Result;
 }
-
-sDate DateAddDays(short Days, sDate Date)
-{
-    short RemainingDays = Days +
-        CalculateNumberOfDaysFromBeginningOfTheYear(Date.Year, Date.Month,
-            Date.Day);
-    short MonthDays = 0;
-    Date.Month = 1;
-    while (true)
-    {
-        MonthDays = NumberOfDaysInAMonth(Date.Month, Date.Year);
-        if (RemainingDays > MonthDays)
-        {
-            RemainingDays -= MonthDays;
-            Date.Month++;
-            if (Date.Month > 12)
-            {
-                Date.Month = 1;
-                Date.Year++;
-            }
-        }
-        else
-        {
-            Date.Day = RemainingDays;
-            break;
-        }
-    }
-    return Date;
-}
-
-
-
 
 
 int main()
@@ -102,15 +50,17 @@ int main()
    
     
     
-    sDate Date = ReadFullDate();
-    short Days = DaysToAdd();
-
-    Date = DateAddDays(Days, Date);
+    sDate Date1 = ReadFullDate();
+    cout << endl;
+    sDate Date2 = ReadFullDate();
     
 
-    cout << "\nDate after adding [" << Days << "] days is: ";
-    cout << Date.Day << "/" << Date.Month << "/" << Date.Year;
-
+    if (CheckIfDate1IsLessThanDate2(Date1, Date2))
+        cout << "\nYes, Date1 is less than Date2.";
+    else
+        cout << "\nNo, Date1 is not less than Date2";
+    
+    
     
     system("pause>0");
 }
