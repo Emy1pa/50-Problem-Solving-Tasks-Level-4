@@ -98,30 +98,40 @@ sDate IncreaseDateByOneDay(sDate Date)
 }
 
 
-int GetAgeInDays(sDate Date1, sDate Date2, bool IncludeEndDay = false) {
+int GetDifferenceInDays(sDate Date1, sDate Date2, bool IncludeEndDay = false) {
     int Days = 0;
+    
+    bool Negative = false;
+    if (!IsDate1BeforeDate2(Date1, Date2)) {
+        swap(Date1, Date2);
+        Negative = true;
+    }
     while (IsDate1BeforeDate2(Date1, Date2)) {
         Days++;
         Date1 = IncreaseDateByOneDay(Date1);
     }
 
-    return IncludeEndDay ? ++Days : Days;
+    if (IncludeEndDay) {
+        if (Negative)
+            return ++Days * -1;
+        else
+            return ++Days;
+    }
+    else {
+        if (Negative)
+            return Days * -1;
+        else
+            return Days;
+    }
+
+    
+
+    
+    
 }
 
 
 
-sDate GetSystemDate(){
-    sDate Date;
-
-    time_t t = time(0);
-    tm* now = localtime(&t);
-
-    Date.Year = now->tm_year + 1900;
-    Date.Month = now->tm_mon + 1;
-    Date.Day = now->tm_mday;
-
-    return Date;
-}
 
 
 
@@ -133,17 +143,20 @@ int main()
 
 
 
-    cout << "Please enter your date of birth: \n\n";
-
     sDate Date1 = ReadFullDate();
     cout << endl;
 
 
-    sDate Date2;
-    Date2 = GetSystemDate();
+    sDate Date2 = ReadFullDate();
+    cout << endl;
 
 
-    cout << "Your age is: " << GetAgeInDays(Date1, Date2, true) << " Day(s).\n";
+    
+    cout << "\nDifference is: "
+        << GetDifferenceInDays(Date1, Date2) << " Day(s).";
+    cout << "\nDifference (Including End Day) is: "
+        << GetDifferenceInDays(Date1, Date2, true) << " Day(s).";
+
 
     system("pause>0");
 }
