@@ -1,4 +1,7 @@
+#pragma warning(disable : 4996)
 #include <iostream>
+#include <ctime>
+
 using namespace std;
 
 short ReadYear() {
@@ -60,6 +63,7 @@ bool IsDate1BeforeDate2(sDate Date1, sDate Date2)
                     Date1.Day < Date2.Day : false))
             : false);
 }
+
 bool IsLastDayInMonth(sDate Date)
 {
     return (Date.Day == NumberOfDaysInAMonth(Date.Month, Date.Year));
@@ -69,7 +73,7 @@ bool IsLastMonthInYear(short Month)
 {
     return (Month == 12);
 }
- 
+
 sDate IncreaseDateByOneDay(sDate Date)
 {
     if (IsLastDayInMonth(Date))
@@ -94,18 +98,30 @@ sDate IncreaseDateByOneDay(sDate Date)
 }
 
 
-int GetDifferenceInDays(sDate Date1, sDate Date2, bool IncludeEndDay = false){
+int GetAgeInDays(sDate Date1, sDate Date2, bool IncludeEndDay = false) {
     int Days = 0;
     while (IsDate1BeforeDate2(Date1, Date2)) {
         Days++;
         Date1 = IncreaseDateByOneDay(Date1);
     }
+
     return IncludeEndDay ? ++Days : Days;
 }
 
 
 
+sDate GetSystemDate(){
+    sDate Date;
 
+    time_t t = time(0);
+    tm* now = localtime(&t);
+
+    Date.Year = now->tm_year + 1900;
+    Date.Month = now->tm_mon + 1;
+    Date.Day = now->tm_mday;
+
+    return Date;
+}
 
 
 
@@ -114,21 +130,20 @@ int GetDifferenceInDays(sDate Date1, sDate Date2, bool IncludeEndDay = false){
 
 int main()
 {
-   
-    
-    
+
+
+
+    cout << "Please enter your date of birth: \n\n";
+
     sDate Date1 = ReadFullDate();
     cout << endl;
-    
-    sDate Date2 = ReadFullDate();
-    cout << endl;
-    
-    
-    cout << "\nDifference is: "
-        << GetDifferenceInDays(Date1, Date2) << " Day(s).";
 
-    cout << "\nDifference (Including End Day) is: "
-        << GetDifferenceInDays(Date1, Date2, true) << " Day(s).";
+
+    sDate Date2;
+    Date2 = GetSystemDate();
+
+
+    cout << "Your age is: " << GetAgeInDays(Date1, Date2, true) << " Day(s).\n";
 
     system("pause>0");
 }
