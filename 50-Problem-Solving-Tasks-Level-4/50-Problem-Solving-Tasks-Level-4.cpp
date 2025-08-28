@@ -97,44 +97,99 @@ sDate IncreaseDateByOneDay(sDate Date)
     return Date;
 }
 
-
-int GetDifferenceInDays(sDate Date1, sDate Date2, bool IncludeEndDay = false) {
-    int Days = 0;
-    
-    bool Negative = false;
-    if (!IsDate1BeforeDate2(Date1, Date2)) {
-        swap(Date1, Date2);
-        Negative = true;
+sDate IncreaseDateByXDays(sDate Date, short xDays){
+    for (int i = 1; i <= xDays; i++)
+    {
+        Date = IncreaseDateByOneDay(Date);
     }
-    while (IsDate1BeforeDate2(Date1, Date2)) {
-        Days++;
-        Date1 = IncreaseDateByOneDay(Date1);
-    }
+    return Date; 
+}
 
-    if (IncludeEndDay) {
-        if (Negative)
-            return ++Days * -1;
-        else
-            return ++Days;
+sDate IncreaseDateByOneWeek(sDate Date){
+    for (int i = 1; i <= 7; i++)
+    {
+        Date = IncreaseDateByOneDay(Date);
+    }
+    return Date;
+}
+
+sDate IncreaseDateByXWeeks(sDate Date, short xWeeks){
+    for (short i = 1; i <= xWeeks; i++)
+    {
+        Date = IncreaseDateByOneWeek(Date);
+    }
+    return Date;
+}
+
+sDate IncreaseDateByOneMonth(sDate Date) {
+    if (Date.Month == 12) {
+        Date.Month = 1;
+        Date.Year++;
     }
     else {
-        if (Negative)
-            return Days * -1;
-        else
-            return Days;
+        Date.Month++;
     }
+    short NumberOfDaysInCurrentMonth = NumberOfDaysInAMonth(Date.Month, Date.Year);
+    if (Date.Day > NumberOfDaysInCurrentMonth) {
+        Date.Day = NumberOfDaysInCurrentMonth;
+    }
+    return Date;
+}
 
-    
-
-    
-    
+sDate IncreaseDateByXMonths(sDate Date, short xMonths) {
+    for (int i = 1; i <= xMonths; i++)
+    {
+        Date = IncreaseDateByOneMonth(Date);
+    }
+    return Date;
 }
 
 
 
+sDate IncreaseDateByOneYear(sDate Date){
+    Date.Year += 1;
+    return Date;
+}
 
+sDate IncreaseDateByXYears(sDate Date, short xYears) {
+    for (int i = 1; i <= xYears; i++)
+    {
+        Date = IncreaseDateByOneYear(Date);
+    }
+    return Date;
+}
+sDate IncreaseDateByXYearsFaster(sDate Date, short xYears) {
+    Date.Year += xYears;
+    return Date;
+}
 
+sDate IncreaseDateByOneDecade(sDate Date){
+    Date.Year += 10;
+    return Date;
+}
 
+sDate IncreaseDateByXDecades(sDate Date, short xDecades) {
+    for (int i = 1; i <= xDecades; i++)
+    {
+        Date = IncreaseDateByOneDecade(Date);
+    }
+    return Date;
+}
+
+sDate IncreaseDateByXDecacesFaster(sDate Date, short xDecades){
+    Date.Year += (xDecades * 10);
+    return Date;
+}
+
+sDate IncreaseDateByOneCentury(sDate Date) {
+    Date.Year += 100;
+    return Date;
+}
+
+sDate IncreaseDateByOneMillennium(sDate Date) {
+    Date.Year += 1000;
+    return Date;
+}
 
 
 
@@ -143,20 +198,53 @@ int main()
 
 
 
-    sDate Date1 = ReadFullDate();
+    sDate Date = ReadFullDate();
     cout << endl;
 
+    cout << "Date After: " << endl;
 
-    sDate Date2 = ReadFullDate();
-    cout << endl;
+    Date = IncreaseDateByOneDay(Date);
 
+    cout << "\n01- Adding one day is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
 
-    
-    cout << "\nDifference is: "
-        << GetDifferenceInDays(Date1, Date2) << " Day(s).";
-    cout << "\nDifference (Including End Day) is: "
-        << GetDifferenceInDays(Date1, Date2, true) << " Day(s).";
+    Date = IncreaseDateByXDays(Date, 10);
 
+    cout << "02- Adding 10 days is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
 
+    Date = IncreaseDateByOneWeek(Date);
+    cout << "03- Adding one week is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByXWeeks(Date, 10);
+    cout << "04- Adding 10 weeks is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByOneMonth(Date);
+    cout << "05- Adding 1 month is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByXMonths(Date, 5);
+    cout << "06- Adding 5 month is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByOneYear(Date);
+    cout << "07- Adding 1 year is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByXYears(Date, 10);
+    cout << "08- Adding 10 years is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByXYearsFaster(Date, 10);
+    cout << "09- Adding 10 years (faster) is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByOneDecade(Date);
+    cout << "10- Adding one Decade is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByXDecades(Date, 10);
+    cout << "11- Adding 10 Decades is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByXDecacesFaster(Date, 10);
+    cout << "12- Adding 10 Decades (faster) is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByOneCentury(Date);
+    cout << "13- Adding One Century is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+
+    Date = IncreaseDateByOneMillennium(Date);
+    cout << "14- Adding One Millenium is: " << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
     system("pause>0");
 }
