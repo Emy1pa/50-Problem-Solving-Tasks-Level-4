@@ -124,18 +124,21 @@ bool IsDate1BeforeDate2(sDate Date1, sDate Date2)
             : false);
 }
 
-int GetDifferenceInDays(sDate Date1, sDate Date2, bool IncludeEndDay = false)
+bool IsBusinessDay(sDate Date)
 {
-    int Days = 0;
-    while (IsDate1BeforeDate2(Date1, Date2))
+    return !IsWeekEnd(Date);
+}
+
+sDate CalculateVacationDays(sDate &Date1, short &DaysCount) {
+    for (short i = 1; i <= DaysCount;)
     {
-        if (!IsWeekEnd(Date1)) {
-                Days++;
+        if (IsBusinessDay(Date1)) {
+            i++;
         }
-                Date1 = IncreaseDateByOneDay(Date1);
-    }
+        Date1 = IncreaseDateByOneDay(Date1);
         
-    return IncludeEndDay ? ++Days : Days;
+    }
+    return Date1;
 }
 
 
@@ -146,21 +149,21 @@ int main()
 {
 
     cout << "Vacation Starts: \n";
-    sDate Date1 = ReadFullDate();
+    sDate VacationFrom = ReadFullDate();
     cout << endl;
 
-    cout << "Vacation Ends: \n";
-    sDate Date2 = ReadFullDate();
-    cout << endl;
-
-    short OrderOfDay1InWeek = DayOfWeekOrder(Date1);
-    short OrderOfDay2InWeek = DayOfWeekOrder(Date2);
-
-    cout << "Vacation From: " << DayShortName(OrderOfDay1InWeek) << " , " << Date1.Day << "/" << Date1.Month << "/" << Date1.Year << endl;
-    cout << "Vacation To: " << DayShortName(OrderOfDay2InWeek) << " , " << Date2.Day << "/" << Date2.Month << "/" << Date2.Year << endl;
-
-    cout << "Actual Vacation Days is: " << GetDifferenceInDays(Date1, Date2) << endl;
     
+    short VacationDays;
+    cout << "\nPlease enter vacation days ? ";
+    cin >> VacationDays;
+   
+
+   
+    VacationFrom = CalculateVacationDays(VacationFrom, VacationDays);
+    short OrderDayWeek = DayOfWeekOrder(VacationFrom);
+
+    cout << "Return Date: " << DayShortName(OrderDayWeek) << " , " << VacationFrom.Day << "/" << VacationFrom.Month << "/" << VacationFrom.Year << endl;
+
 
     system("pause>0");
 
