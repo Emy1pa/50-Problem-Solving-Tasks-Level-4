@@ -60,26 +60,15 @@ short DayOfWeekOrder(sDate Date){
     return DayOfWeekOrder(Date.Day, Date.Month, Date.Year);
 }
 
-
 string DayShortName(short DayOfWeekOrder){
     string arrDayNames[7] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
     return arrDayNames[DayOfWeekOrder];
 }
 
-bool IsEndOfWeek(sDate Date){
-    return DayOfWeekOrder(Date) == 6;
-}
-
 bool IsWeekEnd(sDate Date){
     return DayOfWeekOrder(Date) == 5 || DayOfWeekOrder(Date) == 6;
 }
-bool IsBuisnessDay(sDate Date){
-    return !(IsWeekEnd(Date));
-}
 
-short DaysUntilTheEndOfWeek(sDate Date){
-    return 6 - DayOfWeekOrder(Date);
-}
 
 short NumberOfDaysInAMonth(short Month, short Year)
 {
@@ -90,12 +79,6 @@ short NumberOfDaysInAMonth(short Month, short Year)
     return (Month == 2) ? (IsLeapYear(Year) ? 29 :
         28) : NumberOfDays[Month - 1];
 }
-
-//short DaysUntilTheEndOfMonth(sDate Date, bool IncludeEndDay = false) {
-//    short NumberOfDaysInCurrentMonth = NumberOfDaysInAMonth(Date.Month, Date.Day);
-//    short Days = NumberOfDaysInCurrentMonth - Date.Day;
-//    return IncludeEndDay ? ++Days : Days;
-//}
 
 bool IsLastDayInMonth(sDate Date)
 {
@@ -146,31 +129,15 @@ int GetDifferenceInDays(sDate Date1, sDate Date2, bool IncludeEndDay = false)
     int Days = 0;
     while (IsDate1BeforeDate2(Date1, Date2))
     {
-        Days++;
-        Date1 = IncreaseDateByOneDay(Date1);
+        if (!IsWeekEnd(Date1)) {
+                Days++;
+        }
+                Date1 = IncreaseDateByOneDay(Date1);
     }
+        
     return IncludeEndDay ? ++Days : Days;
 }
 
-short DaysUntilTheEndOfMonth(sDate Date){
-    sDate EndOfMonthDate;
-    EndOfMonthDate.Day = NumberOfDaysInAMonth(Date.Month, Date.Year);
-    EndOfMonthDate.Month = Date.Month;
-    EndOfMonthDate.Year = Date.Year;
-
-    return GetDifferenceInDays(Date, EndOfMonthDate, true);
-}
-
-short DaysUntilTheEndOfYear(sDate Date) {
-    short DaysUntilEndOfMonth = DaysUntilTheEndOfMonth(Date);
-    short Days = 0;
-    for (short Month = 12; Month > Date.Month; Month--)
-    {
-        Days += NumberOfDaysInAMonth(Month, Date.Year);
-    }
-    Days += DaysUntilEndOfMonth;
-    return Days;
-}
 
 
 
@@ -178,34 +145,23 @@ short DaysUntilTheEndOfYear(sDate Date) {
 int main()
 {
 
-    sDate Date = ReadFullDate();
+    cout << "Vacation Starts: \n";
+    sDate Date1 = ReadFullDate();
     cout << endl;
 
-    short OrderOfDayInWeek = DayOfWeekOrder(Date);
+    cout << "Vacation Ends: \n";
+    sDate Date2 = ReadFullDate();
+    cout << endl;
 
-    cout << "Today is " << DayShortName(OrderOfDayInWeek) << " , " << Date.Day  << "/" << Date.Month << "/" << Date.Year << endl;
+    short OrderOfDay1InWeek = DayOfWeekOrder(Date1);
+    short OrderOfDay2InWeek = DayOfWeekOrder(Date2);
+
+    cout << "Vacation From: " << DayShortName(OrderOfDay1InWeek) << " , " << Date1.Day << "/" << Date1.Month << "/" << Date1.Year << endl;
+    cout << "Vacation To: " << DayShortName(OrderOfDay2InWeek) << " , " << Date2.Day << "/" << Date2.Month << "/" << Date2.Year << endl;
+
+    cout << "Actual Vacation Days is: " << GetDifferenceInDays(Date1, Date2) << endl;
     
-    cout << "\nIs it End of Week ?\n";
-    if (IsEndOfWeek(Date))
-        cout << "Yes, it is the end of week \n";
-    else
-        cout << "No, it is not the end of the week \n";
 
-    cout << "\nIs it Weekend ?\n";
-    if (IsWeekEnd(Date))
-        cout << "Yes, it is a week end.\n";
-    else
-        cout << "No, it is not a week end.\n";
-
-    cout << "\n Is it Business Day ?\n";
-    if (IsBuisnessDay(Date))
-        cout << "Yes, it is a buisness day.\n";
-    else
-        cout << "No, it is NOT a buisness day.\n";
-
-    cout << "\nDays until end of week: " << DaysUntilTheEndOfWeek(Date) << " Day(s).\n";
-    cout << "Days until end of month: " << DaysUntilTheEndOfMonth(Date) << " Day(s).\n";
-    cout << "Days until end of year: " << DaysUntilTheEndOfYear(Date) << " Day(s).\n";
     system("pause>0");
 
 }
