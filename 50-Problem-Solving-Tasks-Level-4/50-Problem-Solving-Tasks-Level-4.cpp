@@ -4,6 +4,12 @@
 
 using namespace std;
 
+enum enDateComparison {
+    enBefore = -1,
+    enEqual = 0,
+    enAfter = 1
+};
+
 short ReadYear() {
     short Year = 0;
     cout << "Please enter a year to check ? ";
@@ -45,25 +51,34 @@ bool IsLeapYear(short Year)
         (Year % 400 == 0);
 }
 
-
-
-
-
-
-bool IsDate1AfterDate2(sDate Date1, sDate Date2)
-{
-    return (Date1.Year > Date2.Year) ? true :
+bool IsDate1BeforeDate2(sDate Date1, sDate Date2){
+    return (Date1.Year < Date2.Year) ? true :
         ((Date1.Year == Date2.Year) ?
-            (Date1.Month > Date2.Month ? true :
+            (Date1.Month < Date2.Month ? true :
                 (Date1.Month == Date2.Month ?
-                    Date1.Day > Date2.Day : false))
+                    Date1.Day < Date2.Day : false))
             : false);
 }
 
+bool IsDate1EqualDate2(sDate Date1, sDate Date2){
+    return (Date1.Year == Date2.Year) ? ((
+        Date1.Month == Date2.Month) ?
+        ((Date1.Day == Date2.Day) ? true :
+            false) : false) : false;
+}
 
+bool IsDate1AfterDate2(sDate Date1, sDate Date2) {
+    return (!IsDate1BeforeDate2(Date1, Date2) && !IsDate1EqualDate2(Date1, Date2));
+}
 
-
-
+enDateComparison DateComparison(sDate Date1, sDate Date2) {
+    if (IsDate1BeforeDate2(Date1, Date2))
+        return enDateComparison::enBefore;
+    else if (IsDate1AfterDate2(Date1, Date2))
+        return enDateComparison::enAfter;
+    else
+        return enDateComparison::enEqual;
+}
 
 int main()
 {
@@ -77,12 +92,9 @@ int main()
     cout << "Enter Date2: \n";
     Date2 = ReadFullDate();
 
-    if (IsDate1AfterDate2(Date1, Date2))
-        cout << "\nYes, Date1 is After Date2.\n";
-    else
-        cout << "\nNon, Date1 is NOT After Date2.\n";
+    
 
-
+    cout << "\nCompare Result = " << DateComparison(Date1, Date2) << endl;
 
     system("pause>0");
 
