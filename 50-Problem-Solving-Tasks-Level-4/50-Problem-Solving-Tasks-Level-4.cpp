@@ -160,21 +160,75 @@ int GetDifferenceInDays(sDate Date1, sDate Date2, bool IncludeEndDay = false)
     return IncludeEndDay ? ++Days * SwapFlagValue : Days * SwapFlagValue;
 }
 
-int CalculatePeriodLength(stPeriod Period, bool IncludeEndDate = false){
-    return GetDifferenceInDays(Period.StartDate, Period.EndDate, IncludeEndDate);
+enum enDateCompare { Before = -1, Equal = 0, After = 1 };
+
+enDateCompare CompareDates(sDate Date1, sDate Date2)
+{
+    if (IsDate1BeforeDate2(Date1, Date2))
+        return enDateCompare::Before;
+    if (IsDate1EqualDate2(Date1, Date2))
+        return enDateCompare::Equal;
+    return enDateCompare::After;
 }
 
-bool CheckIfDateWithinPeriod(stPeriod Period, sDate Date){
-    return (!IsDate1BeforeDate2(Date, Period.StartDate)&& !IsDate1AfterDate2(Date, Period.EndDate));
+bool IsOverlapPeriods(stPeriod Period1, stPeriod Period2)
+{
+    if (
+        CompareDates(Period2.EndDate, Period1.StartDate) ==
+        enDateCompare::Before
+        ||
+        CompareDates(Period2.StartDate, Period1.EndDate) ==
+        enDateCompare::After
+        )
+        return false;
+    else
+        return true;
 }
+
+int PeriodLengthInDays(stPeriod Period, bool IncludeEndDate = false)
+{
+    return GetDifferenceInDays(Period.StartDate, Period.EndDate,
+        IncludeEndDate);
+}
+bool isDateInPeriod(sDate Date, stPeriod Period)
+{
+    return !(CompareDates(Date, Period.StartDate) == enDateCompare::Before
+        ||
+        CompareDates(Date, Period.EndDate) == enDateCompare::After);
+}
+
+int CountOverLapDays(stPeriod Period1, stPeriod Period2){
+    int Period1Length = PeriodLengthInDays(Period1, true);
+    int Period2Length = PeriodLengthInDays(Period2, true);
+    int OverlapDays = 0;
+
+    if (!IsOverlapPeriods(Period1, Period2))
+        return 0;
+
+    if (Period1Length < Period2Length) {
+        while (IsDate1BeforeDate2(Period1.StartDate, Period1.EndDate)) {
+            if (isDateInPeriod(Period1.StartDate, Period2))
+                OverlapDays++;
+            Period1.StartDate = IncreaseDateByOneDay(Period1.StartDate);
+        }
+    }
+    else {
+        while (IsDate1BeforeDate2(Period2.StartDate, Period2.EndDate)) {
+            if (isDateInPeriod(Period2.StartDate, Period1))
+                OverlapDays++;
+            Period2.StartDate = IncreaseDateByOneDay(Period2.StartDate);
+        }
+    }
+    return OverlapDays;
+}
+
 
 int main()
 {
 
     
-    stPeriod Period1;
+    stPeriod Period1, Period2;
 
-    sDate Date;
    
     cout << "Enter Period 1: \n";
     cout << "Enter Start Date: \n\n";
@@ -185,14 +239,18 @@ int main()
 
     Period1.EndDate = ReadFullDate();
 
-    cout << "\n\nEnter Date to check: \n\n";
+    
+    cout << "\n\nEnter Period 2: \n";
+    cout << "Enter Start Date: \n\n";
 
-    Date = ReadFullDate();
+    Period2.StartDate = ReadFullDate();
 
-    if (CheckIfDateWithinPeriod(Period1, Date))
-        cout << "\nYes, Date is within period\n";
-    else
-        cout << "\nNon, Date is not within period \n";
+    cout << "\nEnter End Date: \n\n";
+
+    Period2.EndDate = ReadFullDate();
+
+    cout << "Overlap Days Count is: " << CountOverLapDays(Period1, Period2) << endl;
+    
 
     system("pause>0");
 
