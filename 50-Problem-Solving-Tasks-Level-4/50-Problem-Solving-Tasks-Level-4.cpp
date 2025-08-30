@@ -96,7 +96,7 @@ sDate IncreaseDateByOneDay(sDate Date)
 
 string ReadDateString(){
     string Date;
-    cout << "Please enter Date dd/mm/yyyy?: ";
+    cout << "Please enter Date dd/mm/yyyy? ";
     cin >> Date;
     return Date;
 }
@@ -139,17 +139,51 @@ string ConvertDateToString(sDate Date, string Seperator = "/") {
     return TextRecord;
 }
 
+enum enDateFormat {
+    enDMY,
+    enYDM,
+    enMDY,
+    enDashDMY,
+    enDashMDY,
+    enTextDMY,
+};
+
+void PrintDayFormat(string S1, enDateFormat DateFormat){
+    sDate Date = ConvertDataToStructure(S1);
+    switch (DateFormat)
+    {
+    case enDateFormat::enDMY: 
+        cout << Date.Day << "/" << Date.Month << "/" << Date.Year << endl;
+        break;
+    case enDateFormat::enYDM:
+        cout << Date.Year << "/" << Date.Day << "/" << Date.Month << endl;
+        break;
+    case enDateFormat::enMDY:
+        cout << Date.Month << "/" << Date.Day << "/" << Date.Year << endl;
+        break;
+    case enDateFormat::enDashDMY:
+        cout << Date.Day << "-" << Date.Month << "-" << Date.Year << endl;
+        break;
+    case enDateFormat::enDashMDY:
+        cout << Date.Month << "-" << Date.Day << "-" << Date.Year << endl;
+        break;
+    case enDateFormat::enTextDMY:
+        cout << "Date: " << Date.Day << ", Month: " << Date.Month << ", Year: " << Date.Year << endl;
+        break;
+   
+    }
+}
+
 int main()
 {
     string Text = ReadDateString();
-
-    sDate Date = ConvertDataToStructure(Text);
     
-    cout << "\nDay: " << Date.Day << endl;
-    cout << "Month: " << Date.Month << endl;
-    cout << "Year: " << Date.Year << endl;
-
-    cout << "You Entered: " << ConvertDateToString(Date) << endl;
+    PrintDayFormat(Text, enDateFormat::enDMY);
+    PrintDayFormat(Text, enDateFormat::enMDY);
+    PrintDayFormat(Text, enDateFormat::enYDM);
+    PrintDayFormat(Text, enDateFormat::enDashMDY);
+    PrintDayFormat(Text, enDateFormat::enDashDMY);
+    PrintDayFormat(Text, enDateFormat::enTextDMY);
     system("pause>0");
 
 }
