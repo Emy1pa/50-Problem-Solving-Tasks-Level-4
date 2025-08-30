@@ -1,6 +1,8 @@
 #pragma warning(disable : 4996)
 #include <iostream>
 #include <ctime>
+#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -91,26 +93,63 @@ sDate IncreaseDateByOneDay(sDate Date)
 }
 
 
-bool CheckForValidatedDate(sDate Date){
-    
-    short NumberOfDaysInCurrentMonth = NumberOfDaysInAMonth(Date.Month, Date.Year);
-    if ((Date.Month < 1 || Date.Month > 12) || (Date.Day < 1 || Date.Day > NumberOfDaysInCurrentMonth))
-        return false;
-    else
-        return true;
+
+string ReadDateString(){
+    string Date;
+    cout << "Please enter Date dd/mm/yyyy?: ";
+    cin >> Date;
+    return Date;
+}
+
+vector <string> SplitString(string S1, string Delim){
+    vector<string> vString;
+    short pos = 0;
+    string sWord;
+    while ((pos = S1.find(Delim)) !=
+        std::string::npos){
+        sWord = S1.substr(0, pos);
+        if (sWord != "") {
+            vString.push_back(sWord);
+        }
+        S1.erase(0, pos + Delim.length());
+    }
+    if (S1 != "") {
+        vString.push_back(S1);
+    }
+    return vString;
+}
+
+sDate ConvertDataToStructure(string Text, string Seperator = "/") {
+    sDate Date;
+    vector <string> vString;
+
+    vString = SplitString(Text, Seperator);
+    Date.Day = stoi(vString[0]);
+    Date.Month = stoi(vString[1]);
+    Date.Year = stoi(vString[2]);
+
+    return Date;
+}
+
+string ConvertDateToString(sDate Date, string Seperator = "/") {
+    string TextRecord = "";
+    TextRecord += to_string(Date.Day) + Seperator;
+    TextRecord += to_string(Date.Month) + Seperator;
+    TextRecord += to_string(Date.Year) ;
+    return TextRecord;
 }
 
 int main()
 {
-    sDate Date = ReadFullDate();
+    string Text = ReadDateString();
 
-    if (CheckForValidatedDate(Date))
-        cout << "\nYes, Date is a validated date.\n";
-    else
-        cout << "\nNo, Date is not a validated date.\n";
+    sDate Date = ConvertDataToStructure(Text);
     
-    
+    cout << "\nDay: " << Date.Day << endl;
+    cout << "Month: " << Date.Month << endl;
+    cout << "Year: " << Date.Year << endl;
 
+    cout << "You Entered: " << ConvertDateToString(Date) << endl;
     system("pause>0");
 
 }
